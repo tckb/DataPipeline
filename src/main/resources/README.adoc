@@ -97,7 +97,7 @@ Data pipeline
 
 [[data-pipeline]]
 .an overview of the design of this library
-image::design.png[Design,width="1050" link=“imgs/design.png"]
+image::design.png[Design,width="1050" link="imgs/design.png"]
 [[data-pipeline]]
 
 [[why-so-complicated-pipeline]]
