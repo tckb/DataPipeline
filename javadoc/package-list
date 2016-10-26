@@ -1,0 +1,8 @@
+com.tckb.data.basetypes
+com.tckb.data.parser
+com.tckb.data.parser.impl
+com.tckb.data.processor
+com.tckb.data.processor.impl
+com.tckb.data.writer
+com.tckb.data.writer.impl
+com.tckb.usage

@@ -1,0 +1,152 @@
+[[setup-instructions]]
+Setup instructions
+------------------
+
+After the extaction of `.zip` folder, you will the following directory structure.
+
+[source,bash]
+----------------
+.
+├── build  // <1>
+│   └── data-pipeline-0.1-jar-with-dependencies.jar // <2>
+├── data  // <3>
+│   ├── hotels_large.csv
+│   ├── hotels_small.csv
+│   ├── hotels_small_noheaders.csv
+│   └── hotels_small_partialheaders.csv
+├── javadoc // <4>
+│   ├── allclasses-frame.html
+│   ├── allclasses-noframe.html
+│   ├── com
+│   ├── constant-values.html
+│   ├── deprecated-list.html
+│   ├── help-doc.html
+│   ├── index-all.html
+│   ├── index.html // <5>
+│   ├── overview-frame.html
+│   ├── overview-summary.html
+│   ├── overview-tree.html
+│   ├── package-list
+│   ├── script.js
+│   ├── serialized-form.html
+│   └── stylesheet.css
+├── pom.xml
+├── readme // <6>
+│   ├── README.html // <7>
+│   ├── README.pdf // <8>
+│   └── imgs
+└── src // <9>
+    ├── main // <10>
+    └── test // <11>
+
+----------------
+<1> build directory
+<2> the library
+<3> sample data
+<4> source documentation folder
+<5> the javadoc main index file
+<6> documentation of the project
+<7> this readme file
+<8> the same readme file in link:README.pdf[PDF]
+<9> main source directory
+<10> main source files
+<11> test cases folder
+
+
+[[dependencies]]
+Dependencies
+^^^^^^^^^^^^
+
+* Java, JDK version 1.8+. OpenJDK or Oracle either of which will work.
+* Maven v3.0 or above
+* No platform dependency.
+
+[[compilation]]
+Compilation
+^^^^^^^^^^^
+
+[source,bash]
+-----------------------------
+$ mvn clean package clean
+-----------------------------
+
+the above command will download the required dependencies from the
+central repository and assembles the project with the required
+dependencies and bulds in `/target` folder.
+`dataconverter-0.1-jar-with-dependencies.jar` is the jar with the
+required dependencies.
+
+[[test-usage]]
+Test Usage
+^^^^^^^^^^
+
+for testing the library, I have added some sample data in `/data`
+folder. The test usage
+
+[source,bash]
+-----------------------------
+$ java -jar build/data-pipeline-0.1-jar-with-dependencies.jar --read-format csv --write-format [xml|json|md|sql|yaml] data/hotels_small_noheaders.csv --no-headers
+...
+$ java -jar build/data-pipeline-0.1-jar-with-dependencies.jar --read-format csv --write-format [xml|json|md|sql|yaml] data/hotels_small.csv
+
+-----------------------------
+
+[[data-pipeline]]
+Data pipeline
+^^^^^^^^^^^^^
+
+[[data-pipeline]]
+.an overview of the design of this library
+image::design.png[Design,width="1050" link=“imgs/design.png"]
+[[data-pipeline]]
+
+[[why-so-complicated-pipeline]]
+Why so complicated pipeline?!
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+a question might arise why design such a complicated pipeline when the
+goal is to __convert the data from one format to another__. Here are
+some of my rationales or design goals:
+
+* Should be easy extended
+* Support for custom datatypes.
+* Support for pre & post- processing of data before and after reading
+data.
+* Support for multiple dataformats both for reading and writing data
+* Support for data-sanatization before processing.
+
+[[alright-how-do-i-use-it]]
+alright, how do I use it
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Get started?
+** Check `com.tckb.usage.TestUsage` for sample usage
+* Have a new dataformat you want to use?
+** *extend* `com.tckb.data.parser.RecordParser` and
+`AbstractRecordWriter` to implement your own custom dataformat
+** as an example, I have a written a custom writer and parser in
+`com.tckb.usage` please check.
+* How do I use it for my custom data type
+** your custom datatype *must* `implements SerializableData<?>` for the
+usage. Please write a resonable logic for unimplemented methods. as a
+sample, check `com.tckb.usage.Hotel`
+* 
+
+[[all-great-but-has-it-been-tested]]
+all great! but has it been tested?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I have tested with some basic `JUnit` test cases for *PoC* and seems to be
+working. But, hey I had just 2 days to design, code, test and document! cut me some
+slack ;)
+
+[[gotchas]]
+Gotchas!
+^^^^^^^^
+
+* the library has been designed keeping *KISS, YAGNI & DRY* principles
+with focus on extendability and stability in mind. So, please expect
+trivial, non-optimized code at places.
+* the library is not *_THREAD SAFE_* ! but easily can be
+modified/extended to be one. please be aware of this while testing the
+code
